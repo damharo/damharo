@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>노래책 — 담하로</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* ── 검색/필터 바 ── */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .search-wrap::before {
+      content: '🔍';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .9rem;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 24px;
+      font-size: .9rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      outline: none;
+      background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+      color: var(--text);
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: var(--glow);
+    }
+    .filter-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      transition: all .2s;
+      color: var(--text-muted);
+    }
+    .filter-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+    }
+
+    /* ── 통계 ── */
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .875rem;
+    }
+    .stat-num {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Gowun Dodum', sans-serif;
+    }
+    .stat-label { color: var(--text-muted); font-size: .8rem; }
+
+    /* ── 테이블 ── */
+    .song-table-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .song-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .song-table thead tr {
+      background: var(--primary);
+      color: var(--white);
+    }
+    .song-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .song-table th:hover { background: var(--primary-light); }
+    .sort-icon { opacity: .5; margin-left: 4px; }
+    .sort-icon.asc::after { content: ' ↑'; }
+    .sort-icon.desc::after { content: ' ↓'; }
+
+    .song-table tbody tr {
+      border-bottom: 1px solid var(--gray-200);
+      transition: background .15s;
+    }
+    .song-table tbody tr:hover { background: var(--accent-soft); }
+    .song-table tbody tr:last-child { border-bottom: none; }
+    .song-table td {
+      padding: 11px 16px;
+      font-size: .875rem;
+    }
+    .td-title { font-weight: 600; color: var(--primary-deep); }
+    .td-artist { color: var(--text-muted); }
+    .td-genre .badge { font-size: .72rem; }
+
+    /* 장르 배지 컬러 */
+    .genre-kpop    { background: #fce7f3; color: #be185d; }
+    .genre-jpop    { background: #ede9fe; color: #6d28d9; }
+    .genre-pop     { background: #dbeafe; color: #1d4ed8; }
+    .genre-ballad  { background: #d1fae5; color: #065f46; }
+    .genre-ost     { background: #fef3c7; color: #92400e; }
+    .genre-anime   { background: #fce7f3; color: #9d174d; }
+    .genre-etc     { background: var(--gray-200); color: var(--gray-600); }
+
+    /* 레벨 별 */
+    .level-stars { color: var(--accent); letter-spacing: -1px; font-size: .85rem; }
+    .level-stars .off { color: var(--gray-200); }
+
+    /* 빈 상태 */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+    /* 페이지네이션 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      padding: 20px;
+    }
+    .page-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      cursor: pointer;
+      font-size: .85rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text-muted);
+    }
+    .page-btn:hover { background: var(--primary-pale); border-color: var(--primary); color: var(--primary); }
+    .page-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+
+    /* 로딩 */
+    .loading { text-align: center; padding: 60px; color: var(--text-muted); }
+    .spinner {
+      display: inline-block;
+      width: 28px; height: 28px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .song-table th:nth-child(4),
+      .song-table td:nth-child(4),
+      .song-table th:nth-child(5),
+      .song-table td:nth-child(5) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-logo">🌊 담하로</a>
+    <a href="../schedule/" class="nav-link">📅 일정</a>
+    <a href="../songbook/" class="nav-link active">🎵 노래책</a>
+    <a href="../upbo/" class="nav-link">⚡ 업보</a>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="page-header fade-up">
+    <h1>🎵 노래책</h1>
+    <p>K-POP · J-POP 위주 정기 노래방송</p>
+  </div>
+
+  <!-- 통계 -->
+  <div class="stats-row fade-up" id="statsRow">
+    <div class="stat-chip">
+      <div><div class="stat-num" id="totalCount">—</div><div class="stat-label">총 곡수</div></div>
+    </div>
+    <div class="stat-chip">
+      <div><div class="stat-num" id="kpopCount">—</div><div class="stat-label">K-POP</div></div>
+    </div>
+    <div class="stat-chip">
+      <div><div class="stat-num" id="jpopCount">—</div><div class="stat-label">J-POP</div></div>
+    </div>
+  </div>
+
+  <!-- 검색/필터 -->
+  <div class="toolbar fade-up">
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" placeholder="곡명 또는 아티스트 검색…" oninput="onSearch()">
+    </div>
+    <div class="filter-group" id="filterGroup">
+      <button class="filter-btn active" data-genre="all" onclick="setGenre('all')">전체</button>
+      <button class="filter-btn" data-genre="kpop" onclick="setGenre('kpop')">K-POP</button>
+      <button class="filter-btn" data-genre="jpop" onclick="setGenre('jpop')">J-POP</button>
+      <button class="filter-btn" data-genre="pop"  onclick="setGenre('pop')">POP</button>
+      <button class="filter-btn" data-genre="ballad" onclick="setGenre('ballad')">발라드</button>
+      <button class="filter-btn" data-genre="ost"  onclick="setGenre('ost')">OST</button>
+      <button class="filter-btn" data-genre="anime" onclick="setGenre('anime')">애니</button>
+      <button class="filter-btn" data-genre="etc"  onclick="setGenre('etc')">기타</button>
+    </div>
+  </div>
+
+  <!-- 테이블 -->
+  <div class="song-table-wrap fade-up" id="tableWrap">
+    <div class="loading"><div class="spinner"></div><br><br>불러오는 중…</div>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<footer style="background:var(--primary-deep);color:rgba(255,255,255,.6);text-align:center;padding:24px;font-size:.8rem;">
+  © 2026 담하로 팬사이트
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://mvpwyshztjttmdfbuuea.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12cHd5c2h6dGp0dG1kZmJ1dWVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxNTIwMjEsImV4cCI6MjA2MzcyODAyMX0.PLACEHOLDER';
+
+  const PAGE_SIZE = 30;
+  let allSongs = [];
+  let filtered = [];
+  let curGenre = 'all';
+  let curQuery = '';
+  let curPage = 1;
+  let sortCol = 'sort_order';
+  let sortDir = 'asc';
+
+  const GENRE_LABELS = {
+    kpop: 'K-POP', jpop: 'J-POP', pop: 'POP',
+    ballad: '발라드', ost: 'OST', anime: '애니', etc: '기타'
+  };
+
+  async function fetchSongs() {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/songs?select=*&order=sort_order.asc,created_at.asc`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      allSongs = await res.json();
+      if (!Array.isArray(allSongs)) allSongs = [];
+    } catch(e) { allSongs = []; }
+  }
+
+  function updateStats() {
+    document.getElementById('totalCount').textContent = allSongs.length;
+    document.getElementById('kpopCount').textContent = allSongs.filter(s => s.genre === 'kpop').length;
+    document.getElementById('jpopCount').textContent = allSongs.filter(s => s.genre === 'jpop').length;
+  }
+
+  function applyFilter() {
+    filtered = allSongs.filter(s => {
+      const matchGenre = curGenre === 'all' || s.genre === curGenre;
+      const q = curQuery.toLowerCase();
+      const matchQ = !q || (s.title||'').toLowerCase().includes(q) || (s.artist||'').toLowerCase().includes(q);
+      return matchGenre && matchQ;
+    });
+    // 정렬
+    filtered.sort((a, b) => {
+      let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (va < vb) return sortDir === 'asc' ? -1 : 1;
+      if (va > vb) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+    curPage = 1;
+    renderTable();
+    renderPagination();
+  }
+
+  function genreClass(g) {
+    const map = { kpop:'genre-kpop', jpop:'genre-jpop', pop:'genre-pop', ballad:'genre-ballad', ost:'genre-ost', anime:'genre-anime', etc:'genre-etc' };
+    return map[g] || 'genre-etc';
+  }
+
+  function stars(level) {
+    const n = Math.min(5, Math.max(1, level || 3));
+    let s = '';
+    for (let i = 1; i <= 5; i++) s += `<span class="${i<=n ? '' : 'off'}">★</span>`;
+    return `<span class="level-stars">${s}</span>`;
+  }
+
+  function renderTable() {
+    const wrap = document.getElementById('tableWrap');
+    if (filtered.length === 0) {
+      wrap.innerHTML = `<div class="empty-state"><div class="empty-icon">🎵</div><p>해당하는 곡이 없어요</p></div>`;
+      return;
+    }
+    const start = (curPage - 1) * PAGE_SIZE;
+    const page = filtered.slice(start, start + PAGE_SIZE);
+
+    const thStyle = col => {
+      const icon = sortCol === col ? `<span class="sort-icon ${sortDir}"></span>` : `<span class="sort-icon"></span>`;
+      return `onclick="setSort('${col}')">${icon}`;
+    };
+
+    let html = `<table class="song-table">
+      <thead><tr>
+        <th ${thStyle('title')}곡명</th>
+        <th ${thStyle('artist')}아티스트</th>
+        <th ${thStyle('genre')}장르</th>
+        <th ${thStyle('level')}난이도</th>
+        <th>메모</th>
+      </tr></thead>
+      <tbody>`;
+    page.forEach(s => {
+      html += `<tr>
+        <td class="td-title">${esc(s.title||'—')}</td>
+        <td class="td-artist">${esc(s.artist||'—')}</td>
+        <td class="td-genre"><span class="badge ${genreClass(s.genre)}">${GENRE_LABELS[s.genre]||'기타'}</span></td>
+        <td>${stars(s.level)}</td>
+        <td style="color:var(--text-muted);font-size:.8rem">${esc(s.memo||'')}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    wrap.innerHTML = html;
+  }
+
+  function renderPagination() {
+    const total = Math.ceil(filtered.length / PAGE_SIZE);
+    const pg = document.getElementById('pagination');
+    if (total <= 1) { pg.innerHTML = ''; return; }
+    let html = '';
+    if (curPage > 1) html += `<button class="page-btn" onclick="goPage(${curPage-1})">‹</button>`;
+    for (let i = 1; i <= total; i++) {
+      if (i === 1 || i === total || Math.abs(i - curPage) <= 2)
+        html += `<button class="page-btn ${i===curPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+      else if (Math.abs(i - curPage) === 3)
+        html += `<span style="color:var(--text-muted);padding:0 4px">…</span>`;
+    }
+    if (curPage < total) html += `<button class="page-btn" onclick="goPage(${curPage+1})">›</button>`;
+    pg.innerHTML = html;
+  }
+
+  function goPage(p) { curPage = p; renderTable(); renderPagination(); window.scrollTo({top:0,behavior:'smooth'}); }
+  function setGenre(g) {
+    curGenre = g;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === g));
+    applyFilter();
+  }
+  function onSearch() { curQuery = document.getElementById('searchInput').value; applyFilter(); }
+  function setSort(col) {
+    if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    else { sortCol = col; sortDir = 'asc'; }
+    applyFilter();
+  }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  (async () => {
+    await fetchSongs();
+    updateStats();
+    applyFilter();
+    document.querySelectorAll('.fade-up').forEach(el => {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 }).observe(el);
+    });
+  })();
+</script>
+</body>
+</html>
