@@ -14,9 +14,9 @@
     --mint-dark:#285398; --mint-deep:#1a3a72;
     --lavender:#96a9c7; --lavender-light:#dde8f7;
     --pink-soft:#FFD6EC;
-    --white:#FFFFFF; --gray-100:#F7F7F7; --gray-200:#EEEEEE;
-    --gray-400:#BBBBBB; --gray-600:#888888;
-    --text:#1C1C2E; --text-muted:#6B7280;
+    --white:#FFFFFF; --gray-100:#f4f7fc; --gray-200:#e2e8f2;
+    --gray-400:#b0bac8; --gray-600:#7a8499;
+    --text:#0f2548; --text-muted:#5a6a82;
     --red:#EF4444; --red-pale:#FEF2F2;
   }
   html { scroll-behavior:smooth; }
@@ -84,7 +84,7 @@
   .member-avatar img { width:100%; height:100%; object-fit:cover; }
   .member-nick { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; word-break:break-all; }
   .member-id { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
-  .member-count { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; background:var(--mint-pale); color:#285398; border:1px solid var(--mint); padding:3px 10px; border-radius:20px; }
+  .member-count { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; background:var(--lavender-light); color:#285398; border:1px solid var(--lavender); padding:3px 10px; border-radius:20px; }
 
   /* 빈상태 */
   .state-box { text-align:center; padding:60px 20px; color:var(--text-muted); font-size:14px; }
@@ -111,7 +111,7 @@
   .task-list { display:flex; flex-direction:column; gap:8px; }
   .task-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--gray-100); border-radius:10px; }
   .task-name { font-size:13px; font-weight:600; color:var(--text); }
-  .task-qty { font-size:12px; font-weight:700; color:#285398; background:var(--mint-pale); border:1px solid var(--mint); padding:2px 10px; border-radius:20px; }
+  .task-qty { font-size:12px; font-weight:700; color:#285398; background:var(--lavender-light); border:1px solid var(--lavender); padding:2px 10px; border-radius:20px; }
   .task-memo-txt { font-size:11px; color:var(--text-muted); margin-top:2px; }
   .modal-close { width:100%; padding:11px; border-radius:12px; background:var(--gray-100); color:var(--text-muted); border:none; font-size:14px; font-weight:600; cursor:pointer; transition:background .2s; font-family:inherit; margin-top:20px; }
   .modal-close:hover { background:var(--gray-200); }
@@ -203,7 +203,7 @@
 
 <footer>
   <p>© 2026 담하로</p>
-  <p style="margin-top:6px;font-size:11px;color:var(--gray-400)">Designed & Developed by <strong style="color:var(--gray-600)">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--gray-400);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--mint-dark)'" onmouseout="this.style.color='var(--gray-400)'">profile@soop.info</a></p>
+  <p style="margin-top:6px;font-size:11px;color:var(--gray-400)">Designed &amp; Developed by <strong style="color:var(--gray-600)">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--gray-400);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--mint-dark)'" onmouseout="this.style.color='var(--gray-400)'">profile@soop.info</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
