@@ -18,7 +18,7 @@
     --text:#0f2548; --text-muted:#5a6a82;
   }
   html { scroll-behavior:smooth; }
-  body { font-family:'Noto Sans KR',sans-serif; background:var(--gray-100); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
+  body { font-family:'Noto Sans KR',sans-serif; background:var(--gray-100); color:var(--text); min-height:100vh; }
 
   /* NAV */
   .nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--gray-200); height:56px; }
@@ -34,7 +34,7 @@
   .nav-link.active { color:var(--primary); background:var(--primary-pale); border-color:var(--accent); }
 
   /* PAGE */
-  .page-wrap { max-width:720px; margin:0 auto; padding:32px 24px 80px; flex:1; }
+  .page-wrap { max-width:720px; margin:0 auto; padding:32px 24px 80px; }
 
   /* 헤더 */
   .page-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px; gap:12px; }
@@ -121,6 +121,8 @@
   @media(max-width:600px) {
     .page-header { flex-direction:column; align-items:flex-start; gap:8px; }
     .header-right { width:100%; justify-content:space-between; }
+    .nav-links { gap:2px; }
+    .nav-link { padding:4px 8px; font-size:11px; }
   }
 </style>
 </head>
