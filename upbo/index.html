@@ -110,8 +110,15 @@
   .modal-uid { font-size:12px; color:var(--text-muted); }
   .task-list { display:flex; flex-direction:column; gap:8px; }
   .task-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--gray-100); border-radius:10px; }
+  .task-row.normal { background:var(--mint-pale); border-left:3px solid var(--mint-dark); }
+  .task-row.event  { background:#fde8f0; border-left:3px solid #f472b6; }
   .task-name { font-size:13px; font-weight:600; color:var(--text); }
-  .task-qty { font-size:12px; font-weight:700; color:#285398; background:var(--lavender-light); border:1px solid var(--lavender); padding:2px 10px; border-radius:20px; }
+  .task-qty { font-size:12px; font-weight:700; padding:2px 10px; border-radius:20px; }
+  .task-qty.normal { color:#285398; background:var(--mint-pale); border:1px solid var(--mint); }
+  .task-qty.event  { color:#be185d; background:#fde8f0; border:1px solid #f9a8d4; }
+  .task-cat { font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; margin-left:6px; flex-shrink:0; }
+  .task-cat.normal { background:var(--mint-pale); color:var(--mint-dark); border:1px solid var(--mint); }
+  .task-cat.event  { background:#fde8f0; color:#be185d; border:1px solid #f9a8d4; }
   .task-memo-txt { font-size:11px; color:var(--text-muted); margin-top:2px; }
   .modal-close { width:100%; padding:11px; border-radius:12px; background:var(--gray-100); color:var(--text-muted); border:none; font-size:14px; font-weight:600; cursor:pointer; transition:background .2s; font-family:inherit; margin-top:20px; }
   .modal-close:hover { background:var(--gray-200); }
@@ -324,12 +331,15 @@ function openUpboModal(memberId, clickEvent) {
 
   const listEl = document.getElementById('modal-task-list');
   listEl.innerHTML = tasks.map(t => `
-    <div class="task-row">
-      <div>
+    <div class="task-row ${t.upbo_task_types?.category==='event'?'event':'normal'}">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <div class="task-name">${esc(t.upbo_task_types?.name||'')}</div>
+        <span class="task-cat ${t.upbo_task_types?.category==='event'?'event':'normal'}">${t.upbo_task_types?.category==='event'?'이벤트':'일반'}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+        <span class="task-qty ${t.upbo_task_types?.category==='event'?'event':'normal'}">×${t.quantity||1}</span>
         ${t.memo ? `<div class="task-memo-txt">${esc(t.memo)}</div>` : ''}
       </div>
-      <span class="task-qty">×${t.quantity||1}</span>
     </div>`).join('');
 
   document.getElementById('upboModal').classList.add('open');
