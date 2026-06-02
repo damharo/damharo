@@ -6,102 +6,180 @@
 <title>담하로</title>
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="../assets/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-.updated-label {
-  font-size: 12px; color: var(--text-muted);
-  background: var(--white); border: 1px solid var(--gray-200);
-  padding: 4px 12px; border-radius: 100px;
-}
-.search-input {
-  width: 100%; padding: 10px 16px; border-radius: 12px;
-  border: 1.5px solid var(--gray-200); background: var(--white);
-  font-size: 13px; color: var(--text); outline: none;
-  transition: border-color .2s; font-family: inherit; margin-bottom: 20px;
-}
-.search-input:focus { border-color: var(--primary); }
+/* ── 리셋 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
 
-/* 멤버 카드 */
-.member-card {
-  background: var(--white); border: 1.5px solid var(--gray-200);
-  border-radius: 18px; padding: 16px 18px;
-  display: flex; gap: 14px; align-items: flex-start;
-  margin-bottom: 10px; transition: all .25s;
-  box-shadow: var(--shadow);
+/* ── 토큰 ── */
+:root{
+  --primary:    #285398;
+  --primary-lt: #3a6db8;
+  --primary-pale:#dde8f7;
+  --primary-dk: #1a3a72;
+  --primary-deep:#0f2548;
+  --accent:     #96a9c7;
+  --accent-lt:  #b8c9de;
+  --accent-soft:#eaf0f8;
+  --bg:         #f4f7fc;
+  --surface:    #ffffff;
+  --border:     #e2e8f2;
+  --shadow:     rgba(40,83,152,.1);
+  --text:       #0f2548;
+  --text-sub:   #5a6a82;
+  --text-mut:   #94a3b8;
 }
-.member-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--accent);
-}
-.member-info { flex-shrink: 0; min-width: 90px; }
-.member-nick { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.2; }
-.member-id   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.task-tags   { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; align-items: flex-start; padding-top: 2px; }
-.task-tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 600;
-  border: 1.5px solid;
-}
-.task-tag.normal { background: var(--primary-pale); border-color: var(--accent); color: var(--primary-dark); }
-.task-tag.event  { background: #fde8f0; border-color: #f9a8d4; color: #be185d; }
-.task-qty  { font-weight: 800; }
-.task-memo { font-size: 11px; opacity: .7; }
+body{background:var(--bg);font-family:'Noto Sans KR',sans-serif;color:var(--text);}
 
-/* 문의 버튼 */
-.inquiry-btn {
-  display: flex; align-items: center; gap: 8px;
-  margin: 28px auto 0; padding: 10px 24px;
-  background: var(--white); border: 1.5px solid var(--gray-200);
-  border-radius: 100px; font-size: 13px; font-weight: 600;
-  color: var(--text-muted); cursor: pointer; transition: all .2s;
-  box-shadow: var(--shadow); font-family: inherit;
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(244,247,252,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
 }
-.inquiry-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.nav-inner{
+  max-width:860px;margin:0 auto;
+  display:flex;align-items:center;
+  padding:0 20px;height:52px;gap:4px;
+}
+.nav-logo{
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:1.05rem;font-weight:700;color:var(--primary);
+  text-decoration:none;margin-right:auto;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-link{
+  text-decoration:none;font-size:13px;font-weight:600;
+  color:var(--text-sub);padding:8px 14px;border-radius:20px;
+  transition:all .2s;
+}
+.nav-link:hover,.nav-link.active{background:var(--primary-pale);color:var(--primary);}
 
-/* 모달 */
-.modal-backdrop {
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(15,37,72,.3); backdrop-filter: blur(6px);
-  display: none; align-items: center; justify-content: center;
-}
-.modal-backdrop.open { display: flex; }
-.modal-box {
-  background: var(--white); border-radius: 22px;
-  padding: 28px; max-width: 380px; width: 90%;
-  box-shadow: 0 20px 60px rgba(15,37,72,.18);
-  border: 1.5px solid var(--gray-200);
-}
-.modal-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--text); font-family: 'Gowun Dodum', sans-serif; }
-.modal-input {
-  width: 100%; padding: 10px 14px; border-radius: 12px;
-  border: 1.5px solid var(--gray-200); font-family: inherit;
-  font-size: 13px; color: var(--text); outline: none; margin-bottom: 10px;
-  transition: border-color .2s; background: var(--bg);
-}
-.modal-input:focus { border-color: var(--primary); background: var(--white); }
-textarea.modal-input { height: 90px; resize: none; }
-.modal-submit {
-  width: 100%; padding: 10px; border-radius: 12px;
-  background: var(--primary); color: #fff; border: none;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  transition: background .2s; font-family: inherit;
-}
-.modal-submit:hover { background: var(--primary-dark); }
+/* ── PAGE WRAP ── */
+.page-wrap{max-width:860px;margin:0 auto;padding:32px 20px 60px;}
 
-.loading-state { text-align: center; padding: 60px; color: var(--text-muted); }
-.spinner {
-  display: inline-block; width: 28px; height: 28px;
-  border: 3px solid var(--gray-200); border-top-color: var(--primary);
-  border-radius: 50%; animation: spin .7s linear infinite;
+/* ── HEADER ROW ── */
+.header-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.empty-box { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1rem; }
+.page-title{
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:22px;font-weight:700;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.updated-label{
+  font-size:12px;color:var(--text-mut);
+  background:var(--surface);border:1px solid var(--border);
+  padding:4px 12px;border-radius:100px;
+}
 
-.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+/* ── 검색 ── */
+.search-input{
+  width:100%;padding:10px 16px;border-radius:12px;
+  border:1.5px solid var(--border);background:var(--surface);
+  font-size:13px;color:var(--text);outline:none;
+  transition:border-color .2s;font-family:inherit;margin-bottom:20px;
+}
+.search-input:focus{border-color:var(--primary);}
+
+/* ── MEMBER CARD ── */
+.member-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:18px;padding:16px 18px;
+  display:flex;gap:14px;align-items:flex-start;
+  margin-bottom:10px;transition:all .25s;
+  box-shadow:0 2px 8px var(--shadow);
+}
+.member-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px var(--shadow);
+  border-color:var(--accent);
+}
+.member-info{flex-shrink:0;min-width:90px;}
+.member-nick{font-size:15px;font-weight:700;color:var(--text);line-height:1.2;}
+.member-id{font-size:11px;color:var(--text-mut);margin-top:2px;}
+
+/* ── TASK TAGS ── */
+.task-tags{display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:flex-start;padding-top:2px;}
+.task-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 12px;border-radius:10px;font-size:12px;font-weight:600;
+  border:1.5px solid;
+}
+.task-tag.normal{background:var(--primary-pale);border-color:var(--accent);color:var(--primary-dk);}
+.task-tag.event {background:#fde8f0;border-color:#f9a8d4;color:#be185d;}
+.task-qty{font-weight:800;}
+.task-memo{font-size:11px;opacity:.7;}
+
+/* ── 문의 버튼 ── */
+.inquiry-btn{
+  display:flex;align-items:center;gap:8px;
+  margin:28px auto 0;padding:10px 24px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:100px;font-size:13px;font-weight:600;
+  color:var(--text-sub);cursor:pointer;transition:all .2s;
+  box-shadow:0 2px 8px var(--shadow);font-family:inherit;
+}
+.inquiry-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px);}
+
+/* ── 모달 ── */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(15,37,72,.3);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;
+}
+.modal-backdrop.open{display:flex;}
+.modal-box{
+  background:var(--surface);border-radius:22px;
+  padding:28px;max-width:380px;width:90%;
+  box-shadow:0 20px 60px rgba(15,37,72,.18);
+  border:1.5px solid var(--border);
+}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:16px;color:var(--text);font-family:'Gowun Dodum',sans-serif;}
+.modal-input{
+  width:100%;padding:10px 14px;border-radius:12px;
+  border:1.5px solid var(--border);font-family:inherit;
+  font-size:13px;color:var(--text);outline:none;margin-bottom:10px;
+  transition:border-color .2s;background:var(--bg);
+}
+.modal-input:focus{border-color:var(--primary);background:var(--surface);}
+textarea.modal-input{height:90px;resize:none;}
+.modal-submit{
+  width:100%;padding:10px;border-radius:12px;
+  background:var(--primary);color:#fff;border:none;
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .2s;font-family:inherit;
+}
+.modal-submit:hover{background:var(--primary-dk);}
+
+/* ── 로딩/빈 상태 ── */
+.loading{text-align:center;padding:32px;font-size:13px;color:var(--text-mut);}
+.empty-box{
+  background:var(--surface);border:1.5px dashed var(--border);
+  border-radius:16px;padding:32px;
+  text-align:center;font-size:13px;color:var(--text-mut);
+}
+
+/* ── 스크롤바 ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px;}
+
+/* ── fade-up ── */
+.fade-up{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* ── 푸터 ── */
+.page-footer{
+  border-top:1.5px solid var(--border);
+  text-align:center;padding:20px;font-size:12px;color:var(--text-mut);
+}
 </style>
 </head>
-<body style="display:flex;flex-direction:column;min-height:100vh">
+<body>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -112,27 +190,20 @@ textarea.modal-input { height: 90px; resize: none; }
   </div>
 </nav>
 
-<main class="container" style="flex:1">
+<div class="page-wrap">
   <div class="header-row fade-up">
-    <div class="page-header" style="margin-bottom:0">
-      <h1>⚡ 업보</h1>
-    </div>
+    <div class="page-title">⚡ 업보</div>
     <div class="updated-label" id="updatedLabel">갱신일: —</div>
   </div>
 
   <input class="search-input fade-up" id="searchInput" type="text" placeholder="닉네임 또는 아이디 검색…">
 
-  <div id="loadingState" class="loading-state"><div class="spinner"></div></div>
+  <div id="loadingState" class="loading">불러오는 중…</div>
   <div id="emptyState" class="empty-box" style="display:none">업보가 없어요 🌊</div>
   <div id="memberList"></div>
 
   <button class="inquiry-btn fade-up" onclick="openInquiry()">✉️ 업보 문의하기</button>
-</main>
-
-<footer style="background:var(--primary-deep);color:rgba(255,255,255,.45);text-align:center;padding:20px 24px;font-size:.8rem;">
-  <p>© 2026 담하로</p>
-  <p style="margin-top:6px;font-size:11px;color:rgba(255,255,255,.3);">Designed &amp; Developed by <strong style="color:rgba(255,255,255,.45);">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:rgba(255,255,255,.3);text-decoration:none;">profile@soop.info</a></p>
-</footer>
+</div>
 
 <!-- 문의 모달 -->
 <div class="modal-backdrop" id="inquiryModal" onclick="closeInquiry(event)">
@@ -149,6 +220,11 @@ textarea.modal-input { height: 90px; resize: none; }
     </div>
   </div>
 </div>
+
+<footer class="page-footer">
+  © 2026 담하로 &nbsp;·&nbsp;
+  <span>Designed &amp; Developed by <strong>아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--text-mut);">profile@soop.info</a></span>
+</footer>
 
 <script>
 const SUPABASE_URL = 'https://mvpwyshztjttmdfbuuea.supabase.co';
@@ -206,7 +282,7 @@ function render(members) {
         <div class="member-nick">${esc(m.nickname)}</div>
         ${m.user_id ? `<div class="member-id">(${esc(m.user_id)})</div>` : ''}
       </div>
-      <div class="task-tags">${tagHtml || '<span style="color:var(--text-muted);font-size:12px;">업보 없음</span>'}</div>
+      <div class="task-tags">${tagHtml || '<span style="color:var(--text-mut);font-size:12px;">업보 없음</span>'}</div>
     </div>`;
   }).join('');
 
@@ -241,7 +317,9 @@ async function submitInquiry() {
   setTimeout(() => document.getElementById('inquiryModal').classList.remove('open'), 2000);
 }
 
-const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: .1 });
+const obs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) e.target.classList.add('visible');
+}), { threshold: .1 });
 document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
 load();
