@@ -22,7 +22,7 @@
 
   /* NAV */
   .nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--gray-200); height:56px; }
-  .nav-inner { max-width:860px; margin:0 auto; padding:0 24px; height:100%; display:flex; align-items:center; gap:16px; }
+  .nav-inner { max-width:720px; margin:0 auto; padding:0 24px; height:100%; display:flex; align-items:center; gap:16px; }
   .nav-back { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-muted); text-decoration:none; transition:color .2s; }
   .nav-back::before { content:'←'; }
   .nav-back:hover { color:var(--primary); }
@@ -34,7 +34,7 @@
   .nav-link.active { color:var(--primary); background:var(--primary-pale); border-color:var(--accent); }
 
   /* PAGE */
-  .page-wrap { max-width:860px; margin:0 auto; padding:32px 24px 80px; flex:1; }
+  .page-wrap { max-width:720px; margin:0 auto; padding:32px 24px 80px; flex:1; }
 
   /* 헤더 */
   .page-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px; gap:12px; }
@@ -49,13 +49,13 @@
   .search-input::placeholder { color:var(--gray-400); }
 
   /* 멤버 그리드 */
-  .member-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .member-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
   @media(max-width:480px) { .member-grid { grid-template-columns:repeat(2,1fr); gap:10px; } }
 
   /* 멤버 카드 */
   .member-card {
     background:var(--white); border:1.5px solid var(--gray-200);
-    border-radius:18px; padding:24px 20px; text-align:center;
+    border-radius:18px; padding:16px 14px; text-align:center;
     cursor:pointer; transition:all .22s;
     box-shadow:0 2px 8px rgba(0,0,0,.04);
     opacity:0; transform:translateY(12px);
@@ -65,15 +65,15 @@
 
   /* 프로필 이미지 */
   .member-avatar {
-    width:80px; height:80px; border-radius:50%;
-    margin:0 auto 12px;
+    width:64px; height:64px; border-radius:50%;
+    margin:0 auto 10px;
     background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
     overflow:hidden; border:2px solid var(--gray-200);
     display:flex; align-items:center; justify-content:center;
     font-size:22px;
   }
   .member-avatar img { width:100%; height:100%; object-fit:cover; }
-  .member-nick { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; word-break:break-all; }
+  .member-nick { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; word-break:break-all; }
   .member-id { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
   .member-count { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; background:var(--primary-pale); color:var(--primary); border:1px solid var(--accent); padding:3px 10px; border-radius:20px; }
 
