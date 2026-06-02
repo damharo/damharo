@@ -54,7 +54,7 @@
 .cal-header-cell:first-child { color: #ef4444; }
 .cal-header-cell:last-child  { color: #3b82f6; }
 
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
 .cal-cell {
   min-height: 88px; background: var(--white);
   border: 1px solid var(--gray-200); border-radius: 12px;
@@ -79,6 +79,7 @@
   margin-bottom: 2px; color: #fff; font-weight: 600;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   cursor: pointer; transition: opacity .2s;
+  max-width: 100%; display: block; width: 100%;
 }
 .cal-event:hover { opacity: .85; }
 /* 기념일 글로우 */
