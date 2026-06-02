@@ -56,10 +56,9 @@
 
 .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
 .cal-cell {
-  height: 88px; background: var(--white);
+  min-height: 88px; background: var(--white);
   border: 1px solid var(--gray-200); border-radius: 12px;
   padding: 6px 8px; transition: all .2s; cursor: default;
-  overflow: hidden;
 }
 .cal-cell:hover { border-color: var(--accent); box-shadow: var(--shadow); }
 .cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
@@ -164,7 +163,7 @@
   </div>
 </nav>
 
-<main class="container" style="flex:1">
+<main class="container" style="flex:1;max-width:860px">
   <div class="page-header fade-up">
     <h1>📅 방송 일정</h1>
     <p>오후 1:30 또는 오후 11:00 방송 예정</p>
