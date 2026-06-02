@@ -4,48 +4,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>담하로</title>
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root {
-    --primary:#285398; --primary-lt:#3a6db8; --primary-pale:#dde8f7;
-    --primary-dk:#1a3a72; --primary-deep:#0f2548;
-    --accent:#96a9c7; --accent-lt:#b8c9de; --accent-soft:#eaf0f8;
+    --mint:#96a9c7; --mint-light:#b8c9de; --mint-pale:#dde8f7;
+    --mint-dark:#285398; --mint-deep:#1a3a72;
+    --lavender:#96a9c7; --lavender-light:#dde8f7;
+    --pink-soft:#FFD6EC;
     --white:#FFFFFF; --gray-100:#F7F7F7; --gray-200:#EEEEEE;
     --gray-400:#BBBBBB; --gray-600:#888888;
     --text:#1C1C2E; --text-muted:#6B7280;
+    --red:#EF4444; --red-pale:#FEF2F2;
   }
   html { scroll-behavior:smooth; }
   body { font-family:'Noto Sans KR',sans-serif; background:var(--gray-100); color:var(--text); min-height:100vh; }
+  body.embed-mode .nav { display:none; }
+  body.embed-mode { background:transparent; }
+  body.embed-mode .page-wrap { padding-top:12px; }
 
   /* NAV */
   .nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--gray-200); height:56px; }
   .nav-inner { max-width:720px; margin:0 auto; padding:0 24px; height:100%; display:flex; align-items:center; gap:16px; }
   .nav-back { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-muted); text-decoration:none; transition:color .2s; }
   .nav-back::before { content:'←'; }
-  .nav-back:hover { color:var(--primary); }
-  .nav-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .nav-back:hover { color:var(--mint-deep); }
+  .nav-dot { width:5px; height:5px; border-radius:50%; background:var(--mint); }
   .nav-title { font-family:'Gowun Dodum',serif; font-size:16px; }
+  /* nav 우측 링크 */
   .nav-links { display:flex; align-items:center; gap:4px; margin-left:auto; }
   .nav-link { padding:5px 13px; border-radius:20px; font-size:12px; font-weight:600; text-decoration:none; transition:all .18s; color:var(--text-muted); background:none; border:1.5px solid transparent; }
-  .nav-link:hover { color:var(--primary); background:var(--primary-pale); border-color:var(--accent); }
-  .nav-link.active { color:var(--primary); background:var(--primary-pale); border-color:var(--accent); }
+  .nav-link:hover { color:var(--mint-deep); background:var(--mint-pale); border-color:var(--mint); }
+  .nav-link.active { color:var(--mint-deep); background:var(--mint-pale); border-color:var(--mint); }
 
   /* PAGE */
   .page-wrap { max-width:720px; margin:0 auto; padding:32px 24px 80px; }
 
   /* 헤더 */
-  .page-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px; gap:12px; }
-  .page-eyebrow { font-size:11px; font-weight:500; color:var(--primary-lt); letter-spacing:.2em; text-transform:uppercase; opacity:.75; }
+  .page-header {
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:20px; gap:12px;
+  }
+  .page-eyebrow { font-size:11px; font-weight:500; color:var(--mint-dark); letter-spacing:.2em; text-transform:uppercase; opacity:.75; }
   .page-title { font-family:'Gowun Dodum',serif; font-size:28px; color:var(--text); }
   .header-right { display:flex; align-items:center; gap:8px; padding-bottom:4px; flex-shrink:0; }
   .updated-badge { font-size:12px; color:var(--text-muted); background:var(--white); border:1px solid var(--gray-200); padding:4px 14px; border-radius:100px; white-space:nowrap; }
 
   /* 검색 */
   .search-input { width:100%; padding:11px 16px; border-radius:14px; border:1.5px solid var(--gray-200); background:var(--white); font-size:14px; color:var(--text); outline:none; font-family:inherit; margin-bottom:20px; transition:border-color .2s; box-shadow:0 2px 8px rgba(0,0,0,.04); }
-  .search-input:focus { border-color:var(--primary); }
+  .search-input:focus { border-color:var(--mint-dark); }
   .search-input::placeholder { color:var(--gray-400); }
 
   /* 멤버 그리드 */
@@ -61,13 +70,13 @@
     opacity:0; transform:translateY(12px);
   }
   .member-card.visible { opacity:1; transform:translateY(0); }
-  .member-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(40,83,152,.12); border-color:var(--accent); }
+  .member-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(168,230,207,.2); border-color:var(--mint); }
 
   /* 프로필 이미지 */
   .member-avatar {
     width:64px; height:64px; border-radius:50%;
     margin:0 auto 10px;
-    background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
+    background:linear-gradient(135deg,var(--mint-pale),var(--lavender-light));
     overflow:hidden; border:2px solid var(--gray-200);
     display:flex; align-items:center; justify-content:center;
     font-size:22px;
@@ -75,14 +84,14 @@
   .member-avatar img { width:100%; height:100%; object-fit:cover; }
   .member-nick { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; word-break:break-all; }
   .member-id { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
-  .member-count { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; background:var(--primary-pale); color:var(--primary); border:1px solid var(--accent); padding:3px 10px; border-radius:20px; }
+  .member-count { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; background:var(--mint-pale); color:#285398; border:1px solid var(--mint); padding:3px 10px; border-radius:20px; }
 
   /* 빈상태 */
   .state-box { text-align:center; padding:60px 20px; color:var(--text-muted); font-size:14px; }
-  .spinner { width:28px; height:28px; border-radius:50%; border:3px solid var(--gray-200); border-top-color:var(--primary); animation:spin .8s linear infinite; margin:0 auto 14px; }
+  .spinner { width:28px; height:28px; border-radius:50%; border:3px solid var(--mint-light); border-top-color:var(--mint-dark); animation:spin .8s linear infinite; margin:0 auto 14px; }
   @keyframes spin { to { transform:rotate(360deg); } }
 
-  /* 업보 팝업 */
+  /* 팝업 */
   .modal-backdrop { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.3); backdrop-filter:blur(6px); display:none; }
   .modal-backdrop.open { display:flex; }
   .modal-box {
@@ -95,29 +104,29 @@
   }
   @keyframes popIn { from{transform:translateX(-50%) translateY(10px) scale(.97);opacity:0} to{transform:translateX(-50%) translateY(0) scale(1);opacity:1} }
   .modal-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
-  .modal-avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft)); overflow:hidden; border:2px solid var(--gray-200); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .modal-avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--mint-pale),var(--lavender-light)); overflow:hidden; border:2px solid var(--gray-200); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:20px; }
   .modal-avatar img { width:100%; height:100%; object-fit:cover; }
   .modal-nick { font-size:16px; font-weight:700; color:var(--text); }
   .modal-uid { font-size:12px; color:var(--text-muted); }
   .task-list { display:flex; flex-direction:column; gap:8px; }
   .task-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--gray-100); border-radius:10px; }
   .task-name { font-size:13px; font-weight:600; color:var(--text); }
-  .task-qty { font-size:12px; font-weight:700; color:var(--primary); background:var(--primary-pale); border:1px solid var(--accent); padding:2px 10px; border-radius:20px; }
+  .task-qty { font-size:12px; font-weight:700; color:#285398; background:var(--mint-pale); border:1px solid var(--mint); padding:2px 10px; border-radius:20px; }
   .task-memo-txt { font-size:11px; color:var(--text-muted); margin-top:2px; }
   .modal-close { width:100%; padding:11px; border-radius:12px; background:var(--gray-100); color:var(--text-muted); border:none; font-size:14px; font-weight:600; cursor:pointer; transition:background .2s; font-family:inherit; margin-top:20px; }
   .modal-close:hover { background:var(--gray-200); }
 
   /* 문의 모달 */
   .modal-input { width:100%; padding:10px 14px; border-radius:12px; border:1.5px solid var(--gray-200); font-family:inherit; font-size:13px; color:var(--text); outline:none; margin-bottom:10px; transition:border-color .2s; }
-  .modal-input:focus { border-color:var(--primary); }
+  .modal-input:focus { border-color:var(--mint-dark); }
   textarea.modal-input { height:90px; resize:none; }
-  .modal-submit { width:100%; padding:11px; border-radius:12px; background:var(--primary); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:background .2s; font-family:inherit; }
-  .modal-submit:hover { background:var(--primary-dk); }
+  .modal-submit { width:100%; padding:11px; border-radius:12px; background:var(--mint-dark); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:background .2s; font-family:inherit; }
+  .modal-submit:hover { background:var(--mint-deep); }
   .inquiry-btn { display:flex; align-items:center; gap:8px; padding:8px 18px; background:var(--white); border:1.5px solid var(--gray-200); border-radius:100px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; font-family:inherit; transition:all .2s; box-shadow:0 2px 8px rgba(0,0,0,.04); }
-  .inquiry-btn:hover { border-color:var(--accent); color:var(--primary); }
+  .inquiry-btn:hover { border-color:var(--mint); color:var(--mint-deep); }
 
   footer { text-align:center; padding:30px 0; font-size:12px; color:var(--gray-400); border-top:1px solid var(--gray-200); margin-top:20px; }
-
+  footer span { color:var(--mint-dark); }
   @media(max-width:600px) {
     .page-header { flex-direction:column; align-items:flex-start; gap:8px; }
     .header-right { width:100%; justify-content:space-between; }
@@ -136,6 +145,7 @@
     <div class="nav-links">
       <a href="../schedule/" class="nav-link">일정</a>
       <a href="../songbook/" class="nav-link">노래책</a>
+      <a 
       <a href="../upbo/" class="nav-link active">업보</a>
     </div>
   </div>
@@ -171,7 +181,7 @@
       </div>
     </div>
     <div class="task-list" id="modal-task-list"></div>
-    <button class="modal-close" onclick="document.getElementById('upboModal').classList.remove('open');document.querySelector('#upboModal .modal-box').style.top=''">닫기</button>
+    <button class="modal-close" onclick="document.getElementById('upboModal').classList.remove('open'); document.querySelector('#upboModal .modal-box').style.top = ''">닫기</button>
   </div>
 </div>
 
@@ -193,13 +203,12 @@
 
 <footer>
   <p>© 2026 담하로</p>
-  <p style="margin-top:6px;font-size:11px;color:var(--gray-400)">Designed &amp; Developed by <strong style="color:var(--gray-600)">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--gray-400);text-decoration:none;">profile@soop.info</a></p>
+  <p style="margin-top:6px;font-size:11px;color:var(--gray-400)">Designed & Developed by <strong style="color:var(--gray-600)">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--gray-400);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--mint-dark)'" onmouseout="this.style.color='var(--gray-400)'">profile@soop.info</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const { createClient } = supabase;
-const sb = createClient(
+const sb = supabase.createClient(
   'https://mvpwyshztjttmdfbuuea.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12cHd5c2h6dGp0dG1kZmJ1dWVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODMyNjgsImV4cCI6MjA5NTc1OTI2OH0.Jdd4nbHouFMbfC10OZfZVSJq_gGPCWIysS1pfeaBP-E'
 );
@@ -230,7 +239,8 @@ async function load() {
       memberTasks[t.member_id].push(t);
     });
 
-    allMembers = (members||[]).filter(m => memberTasks[m.id]?.length && !m.is_hidden);
+    allMembers = (members||[])
+      .filter(m => (memberTasks[m.id]?.length) && !m.is_hidden);
 
     document.getElementById('loadingState').style.display = 'none';
     if (!allMembers.length) { document.getElementById('emptyState').style.display='block'; return; }
@@ -264,6 +274,7 @@ function render(members) {
     </div>`;
   }).join('');
 
+  // 카드 fadeIn
   const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.05});
   grid.querySelectorAll('.member-card').forEach(el => obs.observe(el));
 }
@@ -275,7 +286,9 @@ document.getElementById('searchInput').addEventListener('input', e => {
   ) : allMembers);
 });
 
+// 업보 팝업
 function openUpboModal(memberId, clickEvent) {
+  // 클릭한 카드의 뷰포트 내 중앙 y 계산
   const card = clickEvent?.currentTarget;
   const modal = document.querySelector('#upboModal .modal-box');
   if (card && modal) {
@@ -299,6 +312,7 @@ function openUpboModal(memberId, clickEvent) {
     return na.localeCompare(nb, 'ko');
   });
 
+  // 아바타
   const avatarEl = document.getElementById('modal-avatar');
   const url = avatarUrl(m.user_id);
   avatarEl.innerHTML = url
@@ -308,7 +322,8 @@ function openUpboModal(memberId, clickEvent) {
   document.getElementById('modal-nick').textContent = m.nickname;
   document.getElementById('modal-uid').textContent = m.user_id ? `(${m.user_id})` : '';
 
-  document.getElementById('modal-task-list').innerHTML = tasks.map(t => `
+  const listEl = document.getElementById('modal-task-list');
+  listEl.innerHTML = tasks.map(t => `
     <div class="task-row">
       <div>
         <div class="task-name">${esc(t.upbo_task_types?.name||'')}</div>
@@ -320,20 +335,10 @@ function openUpboModal(memberId, clickEvent) {
   document.getElementById('upboModal').classList.add('open');
 }
 
-function closeUpboModal(e) {
-  if (e.target===e.currentTarget) {
-    document.getElementById('upboModal').classList.remove('open');
-    document.querySelector('#upboModal .modal-box').style.top = '';
-  }
-}
+function closeUpboModal(e) { if(e.target===e.currentTarget) document.getElementById('upboModal').classList.remove('open'); document.querySelector('#upboModal .modal-box').style.top = ''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') { document.getElementById('upboModal').classList.remove('open'); document.getElementById('inquiryModal').classList.remove('open'); }});
 
-document.addEventListener('keydown', e => {
-  if (e.key==='Escape') {
-    document.getElementById('upboModal').classList.remove('open');
-    document.getElementById('inquiryModal').classList.remove('open');
-  }
-});
-
+// 문의
 function openInquiry() {
   document.getElementById('inquiryForm').style.display='block';
   document.getElementById('inquirySuccess').style.display='none';
@@ -352,6 +357,19 @@ async function submitInquiry() {
   document.getElementById('inquirySuccess').style.display='block';
   setTimeout(() => document.getElementById('inquiryModal').classList.remove('open'), 2000);
 }
+
+// embed 모드
+(function() {
+  const params = new URLSearchParams(location.search);
+  if (params.has('embed')) {
+    document.body.classList.add('embed-mode');
+    function sendHeight() {
+      window.parent.postMessage({ type:'upbo-height', height: document.body.scrollHeight }, '*');
+    }
+    new ResizeObserver(sendHeight).observe(document.body);
+    setTimeout(sendHeight, 600);
+  }
+})();
 
 load();
 </script>
