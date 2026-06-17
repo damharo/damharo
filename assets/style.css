@@ -1,29 +1,29 @@
 /* ─────────────────────────────────────────
    담하로 디자인 시스템
-   Primary : #285398 (딥 네이비블루)
-   Accent  : #96a9c7 (페일 스카이블루)
+   Primary : #4a9aba (딥 네이비블루)
+   Accent  : #d4a96a (페일 스카이블루)
 ───────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
 :root {
-  --primary:       #285398;
-  --primary-light: #3a6db8;
-  --primary-pale:  #dde8f7;
-  --primary-dark:  #1a3a72;
-  --primary-deep:  #0f2548;
+  --primary:       #4a9aba;
+  --primary-light: #5badd4;
+  --primary-pale:  #e8f4f8;
+  --primary-dark:  #2d7fa3;
+  --primary-deep:  #2c3e2d;
 
-  --accent:        #96a9c7;
-  --accent-light:  #b8c9de;
-  --accent-soft:   #eaf0f8;
+  --accent:        #d4a96a;
+  --accent-light:  #e2c48a;
+  --accent-soft:   #fdf6e8;
 
-  --bg:            #f4f7fc;
+  --bg:            #faf6ef;
   --white:         #FFFFFF;
   --gray-100:      #F7F8FA;
   --gray-200:      #E8ECF2;
   --gray-400:      #B0BAC8;
   --gray-600:      #7A8499;
-  --text:          #0f2548;
-  --text-muted:    #5a6a82;
+  --text:          #2c3e2d;
+  --text-muted:    #6b7b6c;
 
   --red:           #EF4444;
   --red-pale:      #FEF2F2;
