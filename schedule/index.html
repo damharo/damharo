@@ -23,10 +23,7 @@
     html { scroll-behavior:smooth; }
     ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:#faf6ef; } ::-webkit-scrollbar-thumb { background:#87ceeb; border-radius:3px; }
 
-    .nav-tab { position:relative; padding:12px 24px; font-size:.875rem; font-weight:500; color:#7a8a7b; transition:color .25s; text-decoration:none; }
-    .nav-tab::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:0; height:2px; background:#4a9aba; border-radius:1px; transition:width .3s; }
-    .nav-tab:hover { color:#4a9aba; } .nav-tab:hover::after { width:60%; }
-    .nav-tab.active { color:#4a9aba; } .nav-tab.active::after { width:100%; }
+    
 
     /* 고정 시간 배너 */
     .fb-item { display:flex; align-items:center; gap:8px; padding:8px 18px; background:white; border:1px solid rgba(135,206,235,.3); border-radius:12px; }
@@ -87,15 +84,16 @@
       .nav-tab { padding:10px 16px; font-size:.8125rem; }
     }
   </style>
+  <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body class="bg-bg min-h-screen font-sans">
 
-  <nav class="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-point/20">
-    <div class="max-w-4xl mx-auto flex items-center justify-center">
-      <a href="../" class="nav-tab">프로필</a>
-      <a href="../schedule/" class="nav-tab active">일정</a>
-      <a href="../songbook/" class="nav-tab">노래책</a>
-      <a href="../upbo/" class="nav-tab">업보</a>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../" class="nav-logo" style="text-decoration:none">🐿️ 담하로</a>
+      <a href="../schedule/" class="nav-link active">📅 일정</a>
+      <a href="../songbook/" class="nav-link">🎵 노래책</a>
+      <a href="../upbo/" class="nav-link">⚡ 업보</a>
     </div>
   </nav>
 
